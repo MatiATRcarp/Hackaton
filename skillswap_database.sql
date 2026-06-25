@@ -182,20 +182,34 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER trg_horario_no_solapamiento
-BEFORE INSERT ON horarios
-FOR EACH ROW
-BEGIN
-    DECLARE cant INT;
-    SELECT COUNT(*) INTO cant
-    FROM horarios
-    WHERE tutor_id    = NEW.tutor_id
-      AND fecha       = NEW.fecha
-      AND (NEW.hora_inicio < hora_fin AND NEW.hora_fin > hora_inicio);
-    IF cant > 0 THEN
-        SIGNAL SQLSTATE '45000'
-            SET MESSAGE_TEXT = 'El horario se solapa con uno existente.';
-    END IF;
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER trg_horario_no_solapamiento
+
+BEFORE INSERT ON horarios
+
+FOR EACH ROW
+
+BEGIN
+
+    DECLARE cant INT;
+
+    SELECT COUNT(*) INTO cant
+
+    FROM horarios
+
+    WHERE tutor_id    = NEW.tutor_id
+
+      AND fecha       = NEW.fecha
+
+      AND (NEW.hora_inicio < hora_fin AND NEW.hora_fin > hora_inicio);
+
+    IF cant > 0 THEN
+
+        SIGNAL SQLSTATE '45000'
+
+            SET MESSAGE_TEXT = 'El horario se solapa con uno existente.';
+
+    END IF;
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
@@ -280,21 +294,36 @@ UNLOCK TABLES;
 /*!50003 SET @saved_sql_mode       = @@sql_mode */ ;
 /*!50003 SET sql_mode              = 'STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,NO_ENGINE_SUBSTITUTION' */ ;
 DELIMITER ;;
-/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER trg_solicitud_aceptada
-AFTER UPDATE ON solicitudes
-FOR EACH ROW
-BEGIN
-    IF NEW.estado = 'aceptada' AND OLD.estado = 'pendiente' THEN
-        UPDATE horarios SET estado = 'ocupado' WHERE id = NEW.horario_id;
-    END IF;
-
-    -- Al cancelar o rechazar → liberar horario
-    IF (NEW.estado IN ('cancelada','rechazada')) AND OLD.estado = 'aceptada' THEN
-        UPDATE horarios SET estado = 'libre' WHERE id = NEW.horario_id;
-    END IF;
-
-    -- Al finalizar → dejar ocupado (ya pasó) pero registrar
-    -- (el estado 'ocupado' permanece; el tutor puede borrar el slot si quiere)
+/*!50003 CREATE*/ /*!50017 DEFINER=`root`@`localhost`*/ /*!50003 TRIGGER trg_solicitud_aceptada
+
+AFTER UPDATE ON solicitudes
+
+FOR EACH ROW
+
+BEGIN
+
+    IF NEW.estado = 'aceptada' AND OLD.estado = 'pendiente' THEN
+
+        UPDATE horarios SET estado = 'ocupado' WHERE id = NEW.horario_id;
+
+    END IF;
+
+
+
+    -- Al cancelar o rechazar → liberar horario
+
+    IF (NEW.estado IN ('cancelada','rechazada')) AND OLD.estado = 'aceptada' THEN
+
+        UPDATE horarios SET estado = 'libre' WHERE id = NEW.horario_id;
+
+    END IF;
+
+
+
+    -- Al finalizar → dejar ocupado (ya pasó) pero registrar
+
+    -- (el estado 'ocupado' permanece; el tutor puede borrar el slot si quiere)
+
 END */;;
 DELIMITER ;
 /*!50003 SET sql_mode              = @saved_sql_mode */ ;
