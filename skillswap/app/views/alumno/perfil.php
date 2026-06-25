@@ -65,6 +65,31 @@
     </form>
   </div>
 
+  <!-- Solicitar nueva materia -->
+  <div class="card" style="margin-top:1.2rem;">
+    <div class="card-header">
+      <h2>➕ Solicitar nueva materia</h2>
+      <p style="font-size:.85rem;color:var(--texto-2);">¿No encontrás la materia que buscás? Solicitala y el administrador la revisará.</p>
+    </div>
+    <form method="POST" action="index.php?p=alumno_solicitar_materia">
+      <div style="display:flex;gap:1rem;flex-wrap:wrap;align-items:flex-end;">
+        <div class="form-group" style="flex:2;margin:0;">
+          <label>Nombre de la materia *</label>
+          <input type="text" name="materia_nombre" placeholder="Ej: Álgebra Lineal" required minlength="3">
+        </div>
+        <div class="form-group" style="flex:1;margin:0;">
+          <label>Área *</label>
+          <input type="text" name="materia_area" placeholder="Ej: Matemática" required>
+        </div>
+      </div>
+      <div class="form-group" style="margin-top:.8rem;">
+        <label>Motivo (opcional)</label>
+        <input type="text" name="materia_motivo" placeholder="¿Por qué creés que debería estar?">
+      </div>
+      <button type="submit" class="btn btn-secondary mt-1">Enviar solicitud</button>
+    </form>
+  </div>
+
   <div style="margin-top:1rem;text-align:center;">
     <a href="index.php?p=alumno_convertir" class="btn btn-ghost btn-sm">
       🎓 Quiero convertirme en tutor

@@ -160,6 +160,30 @@ class TutorController {
         redirigir('tutor');
     }
 
+    /** Solicitar que se agregue una nueva materia al catálogo. */
+    public function solicitarMateria(): void {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') redirigir('tutor_perfil');
+        $uid    = Session::userId();
+        $nombre = trim($_POST['materia_nombre'] ?? '');
+        $area   = trim($_POST['materia_area']   ?? '');
+        $motivo = trim($_POST['materia_motivo'] ?? '');
+
+        if (strlen($nombre) < 3 || empty($area)) {
+            Session::flash('error', 'Nombre (mín. 3 caracteres) y área son obligatorios.');
+            redirigir('tutor_perfil');
+        }
+
+        $model = new SolicitudMateria();
+        if ($model->yaEnvioPendiente($uid, $nombre)) {
+            Session::flash('error', 'Ya tenés una solicitud pendiente para esa materia.');
+            redirigir('tutor_perfil');
+        }
+
+        $model->crear($uid, $nombre, $area, $motivo);
+        Session::flash('exito', 'Solicitud de materia enviada. El administrador la revisará pronto.');
+        redirigir('tutor_perfil');
+    }
+
     /** Chat de una solicitud aceptada. */
     public function chat(): void {
         $uid  = Session::userId();
@@ -391,6 +415,30 @@ class AlumnoController {
         redirigir('alumno');
     }
 
+    /** Solicitar que se agregue una nueva materia al catálogo. */
+    public function solicitarMateria(): void {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') redirigir('alumno_perfil');
+        $uid    = Session::userId();
+        $nombre = trim($_POST['materia_nombre'] ?? '');
+        $area   = trim($_POST['materia_area']   ?? '');
+        $motivo = trim($_POST['materia_motivo'] ?? '');
+
+        if (strlen($nombre) < 3 || empty($area)) {
+            Session::flash('error', 'Nombre (mín. 3 caracteres) y área son obligatorios.');
+            redirigir('alumno_perfil');
+        }
+
+        $model = new SolicitudMateria();
+        if ($model->yaEnvioPendiente($uid, $nombre)) {
+            Session::flash('error', 'Ya tenés una solicitud pendiente para esa materia.');
+            redirigir('alumno_perfil');
+        }
+
+        $model->crear($uid, $nombre, $area, $motivo);
+        Session::flash('exito', 'Solicitud de materia enviada. El administrador la revisará pronto.');
+        redirigir('alumno_perfil');
+    }
+
     /** Convertirse en tutor (solicitud de conversión). */
     public function convertirATutor(): void {
         $uid   = Session::userId();
@@ -413,7 +461,7 @@ class AlumnoController {
             if (!$error) {
                 $certPath = $this->subirCertificado();
                 if (!$certPath) {
-                    $error = 'Error al subir el certificado. Solo PDF, JPG o PNG (máx. 2 MB).';
+                    $error = 'Error al subir el certificado. Solo PDF, JPG o PNG (máx. 10 MB).';
                 }
             }
 
@@ -433,7 +481,7 @@ class AlumnoController {
     private function subirCertificado(): string|false {
         $file    = $_FILES['certificado'] ?? null;
         if (!$file) return false;
-        $maxSize = 2 * 1024 * 1024;
+        $maxSize = 10 * 1024 * 1024; // 10 MB
         $allowed = ['image/jpeg', 'image/png', 'application/pdf'];
         if ($file['error'] !== UPLOAD_ERR_OK)  return false;
         if ($file['size'] > $maxSize)           return false;

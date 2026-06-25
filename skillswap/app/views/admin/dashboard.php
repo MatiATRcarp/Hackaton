@@ -27,8 +27,8 @@
       <div class="label">Denuncias pendientes</div>
     </div>
     <div class="stat-card">
-      <div class="numero"><?= count($ultimasSolicitudes) ?></div>
-      <div class="label">Solicitudes totales</div>
+      <div class="numero"><?= count($solicitudesMateriasPend) ?></div>
+      <div class="label">Solicitudes de materias</div>
     </div>
     <div class="stat-card">
       <div class="numero"><?= count($ultimosPagos) ?></div>
@@ -110,11 +110,57 @@
   </div>
   <?php endif; ?>
 
+  <!-- Solicitudes de materias pendientes -->
+  <?php if ($solicitudesMateriasPend): ?>
+  <div class="card">
+    <div class="card-header">
+      <h2>📋 Solicitudes de nuevas materias pendientes</h2>
+    </div>
+    <div class="tabla-wrap">
+      <table>
+        <thead>
+          <tr><th>Solicitante</th><th>Rol</th><th>Materia propuesta</th><th>Área</th><th>Motivo</th><th>Acción</th></tr>
+        </thead>
+        <tbody>
+          <?php foreach ($solicitudesMateriasPend as $sm): ?>
+          <tr>
+            <td><strong><?= e($sm['usuario_nombre']) ?></strong></td>
+            <td>
+              <span class="badge <?= $sm['usuario_rol'] === 'tutor' ? 'badge-primary' : 'badge-secondary' ?>">
+                <?= ucfirst(e($sm['usuario_rol'])) ?>
+              </span>
+            </td>
+            <td><?= e($sm['nombre']) ?></td>
+            <td><?= e($sm['area']) ?></td>
+            <td style="font-size:.82rem;color:var(--texto-2);">
+              <?= $sm['motivo'] ? e($sm['motivo']) : '<em style="color:var(--gris-400)">—</em>' ?>
+            </td>
+            <td>
+              <form method="POST" action="index.php?p=admin_revisar_materia" style="display:flex;gap:.4rem;flex-wrap:wrap;">
+                <input type="hidden" name="solicitud_id" value="<?= $sm['id'] ?>">
+                <input type="text" name="nota" placeholder="Nota (opcional)"
+                       style="border:1.5px solid var(--gris-200);border-radius:var(--radio-sm);padding:.3rem .5rem;font-size:.8rem;min-width:130px;">
+                <button name="accion" value="aprobar"  class="btn btn-success btn-sm">✓ Aprobar</button>
+                <button name="accion" value="rechazar" class="btn btn-danger btn-sm">✕ Rechazar</button>
+              </form>
+            </td>
+          </tr>
+          <?php endforeach; ?>
+        </tbody>
+      </table>
+    </div>
+    <div style="padding:.8rem 0 0;font-size:.82rem;">
+      <a href="index.php?p=admin_solicitudes_materia">Ver todas las solicitudes →</a>
+    </div>
+  </div>
+  <?php endif; ?>
+
   <div style="display:flex;gap:.8rem;flex-wrap:wrap;margin-top:.5rem;">
-    <a href="index.php?p=admin_usuarios"   class="btn btn-secondary">👥 Gestionar usuarios</a>
-    <a href="index.php?p=admin_materias"   class="btn btn-secondary">📚 Materias</a>
-    <a href="index.php?p=admin_denuncias"  class="btn btn-secondary">🚨 Todas las denuncias</a>
-    <a href="index.php?p=admin_blockchain" class="btn btn-secondary">⛓ Pagos blockchain</a>
+    <a href="index.php?p=admin_usuarios"             class="btn btn-secondary">👥 Gestionar usuarios</a>
+    <a href="index.php?p=admin_materias"             class="btn btn-secondary">📚 Materias</a>
+    <a href="index.php?p=admin_solicitudes_materia"  class="btn btn-secondary">📋 Solicitudes de materias</a>
+    <a href="index.php?p=admin_denuncias"            class="btn btn-secondary">🚨 Todas las denuncias</a>
+    <a href="index.php?p=admin_blockchain"           class="btn btn-secondary">⛓ Pagos blockchain</a>
   </div>
 
 </div>

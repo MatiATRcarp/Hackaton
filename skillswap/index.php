@@ -39,7 +39,9 @@ try {
         'admin_denuncias'   => (new AdminController())->denuncias(),
         'admin_resolver'    => (new AdminController())->resolverDenuncia(),
         'admin_blockchain'  => (new AdminController())->blockchain(),
-        'admin_materias'    => (new AdminController())->materias(),
+        'admin_materias'           => (new AdminController())->materias(),
+        'admin_solicitudes_materia'=> (new AdminController())->solicitudesMateria(),
+        'admin_revisar_materia'    => (new AdminController())->revisarSolicitudMateria(),
 
         // ── Tutor ─────────────────────────────────────────────
         'tutor'             => (new TutorController())->index(),
@@ -48,7 +50,8 @@ try {
         'tutor_responder'   => (new TutorController())->responderSolicitud(),
         'tutor_finalizar'   => (new TutorController())->finalizarTutoria(),
         'tutor_cancelar'    => (new TutorController())->cancelar(),
-        'tutor_chat'        => (new TutorController())->chat(),
+        'tutor_chat'              => (new TutorController())->chat(),
+        'tutor_solicitar_materia' => (new TutorController())->solicitarMateria(),
 
         // ── Alumno ────────────────────────────────────────────
         'alumno'            => (new AlumnoController())->index(),
@@ -60,7 +63,8 @@ try {
         'alumno_calificar'  => (new AlumnoController())->calificar(),
         'alumno_chat'       => (new AlumnoController())->chat(),
         'alumno_denunciar'  => (new AlumnoController())->denunciar(),
-        'alumno_convertir'  => (new AlumnoController())->convertirATutor(),
+        'alumno_convertir'         => (new AlumnoController())->convertirATutor(),
+        'alumno_solicitar_materia' => (new AlumnoController())->solicitarMateria(),
 
         default             => (new AuthController())->inicio(),
     };

@@ -9,26 +9,30 @@ class AdminController {
     private Denuncia $denunciaModel;
     private Solicitud $solicitudModel;
     private BlockchainPago $blockchainModel;
+    private SolicitudMateria $solicitudMateriaModel;
 
     public function __construct() {
         Session::requireRol('admin');
-        $this->usuarioModel    = new Usuario();
-        $this->materiaModel    = new Materia();
-        $this->denunciaModel   = new Denuncia();
-        $this->solicitudModel  = new Solicitud();
-        $this->blockchainModel = new BlockchainPago();
+        $this->usuarioModel          = new Usuario();
+        $this->materiaModel          = new Materia();
+        $this->denunciaModel         = new Denuncia();
+        $this->solicitudModel        = new Solicitud();
+        $this->blockchainModel       = new BlockchainPago();
+        $this->solicitudMateriaModel = new SolicitudMateria();
     }
 
     /** Dashboard principal. */
     public function index(): void {
-        $tutoresPendientes  = $this->usuarioModel->listar('tutor', 'pendiente');
-        $denunciasPendientes = $this->denunciaModel->pendientes();
-        $ultimasSolicitudes = $this->solicitudModel->todas();
-        $ultimosPagos       = $this->blockchainModel->todos();
+        $tutoresPendientes       = $this->usuarioModel->listar('tutor', 'pendiente');
+        $denunciasPendientes     = $this->denunciaModel->pendientes();
+        $ultimasSolicitudes      = $this->solicitudModel->todas();
+        $ultimosPagos            = $this->blockchainModel->todos();
+        $solicitudesMateriasPend = $this->solicitudMateriaModel->pendientes();
 
         renderizar('admin/dashboard', compact(
             'tutoresPendientes', 'denunciasPendientes',
-            'ultimasSolicitudes', 'ultimosPagos'
+            'ultimasSolicitudes', 'ultimosPagos',
+            'solicitudesMateriasPend'
         ));
     }
 
@@ -129,10 +133,29 @@ class AdminController {
                 }
             }
 
+            if ($accion === 'editar') {
+                $mid    = (int)($_POST['materia_id'] ?? 0);
+                $nombre = trim($_POST['nombre'] ?? '');
+                $area   = trim($_POST['area']   ?? '');
+                if (strlen($nombre) < 3 || empty($area)) {
+                    Session::flash('error', 'Nombre y área son obligatorios.');
+                } else {
+                    conectar()->prepare('UPDATE materias SET nombre=?, area=? WHERE id=?')
+                              ->execute([$nombre, $area, $mid]);
+                    Session::flash('exito', 'Materia actualizada.');
+                }
+            }
+
             if ($accion === 'desactivar') {
                 $mid = (int)($_POST['materia_id'] ?? 0);
                 conectar()->prepare('UPDATE materias SET activa=0 WHERE id=?')->execute([$mid]);
                 Session::flash('exito', 'Materia desactivada.');
+            }
+
+            if ($accion === 'reactivar') {
+                $mid = (int)($_POST['materia_id'] ?? 0);
+                conectar()->prepare('UPDATE materias SET activa=1 WHERE id=?')->execute([$mid]);
+                Session::flash('exito', 'Materia reactivada.');
             }
 
             redirigir('admin_materias');
@@ -140,5 +163,36 @@ class AdminController {
 
         $materias = conectar()->query('SELECT * FROM materias ORDER BY area, nombre')->fetchAll();
         renderizar('admin/materias', compact('materias', 'exito', 'error'));
+    }
+
+    /** Lista de solicitudes de nueva materia. */
+    public function solicitudesMateria(): void {
+        $solicitudes = $this->solicitudMateriaModel->todas();
+        $exito       = Session::getFlash('exito');
+        $error       = Session::getFlash('error');
+        renderizar('admin/solicitudes_materia', compact('solicitudes', 'exito', 'error'));
+    }
+
+    /** Aprobar o rechazar una solicitud de materia. */
+    public function revisarSolicitudMateria(): void {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') redirigir('admin_solicitudes_materia');
+
+        $id     = (int)($_POST['solicitud_id'] ?? 0);
+        $accion = $_POST['accion'] ?? '';
+        $nota   = trim($_POST['nota'] ?? '');
+
+        if ($accion === 'aprobar') {
+            try {
+                $this->solicitudMateriaModel->aprobar($id, $nota);
+                Session::flash('exito', 'Materia aprobada y agregada al catálogo.');
+            } catch (Throwable) {
+                Session::flash('error', 'Error al aprobar la solicitud.');
+            }
+        } elseif ($accion === 'rechazar') {
+            $this->solicitudMateriaModel->rechazar($id, $nota ?: 'Solicitud rechazada por el administrador.');
+            Session::flash('exito', 'Solicitud rechazada.');
+        }
+
+        redirigir('admin_solicitudes_materia');
     }
 }
