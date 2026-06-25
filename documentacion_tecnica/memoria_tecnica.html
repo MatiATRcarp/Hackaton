@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Memoria Técnica – SkillSwap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 11.5px;
+    color: #1E293B;
+    background: #fff;
+    line-height: 1.6;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 48px 52px;
+  }
+
+  /* PORTADA */
+  .cover {
+    text-align: center;
+    padding: 48px 0 40px;
+    border-bottom: 2px solid #E2E8F0;
+    margin-bottom: 36px;
+  }
+  .cover .logo-badge {
+    display: inline-block;
+    background: #0D9488;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 16px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    margin-bottom: 16px;
+  }
+  .cover h1 {
+    font-size: 32px;
+    font-weight: 800;
+    color: #0F172A;
+    letter-spacing: -0.5px;
+    margin-bottom: 6px;
+  }
+  .cover .tagline {
+    font-size: 13.5px;
+    color: #64748B;
+    margin-bottom: 28px;
+    font-style: italic;
+  }
+  .cover-meta {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 24px;
+    text-align: left;
+    background: #F8FAFC;
+    border: 1px solid #E2E8F0;
+    border-radius: 10px;
+    padding: 18px 22px;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  .cover-meta .meta-item label {
+    font-size: 9px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: #94A3B8;
+    font-weight: 600;
+    display: block;
+  }
+  .cover-meta .meta-item span {
+    font-size: 12px;
+    font-weight: 600;
+    color: #1E293B;
+  }
+
+  /* SECCIONES */
+  h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: #0F172A;
+    margin: 30px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 2px solid #0D9488;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  h3 {
+    font-size: 12.5px;
+    font-weight: 700;
+    color: #1E3A5F;
+    margin: 18px 0 6px;
+  }
+
+  p { margin-bottom: 8px; }
+
+  ul, ol {
+    padding-left: 18px;
+    margin-bottom: 10px;
+  }
+  li { margin-bottom: 3px; }
+
+  /* TABLA */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+    font-size: 11px;
+  }
+  th {
+    background: #1E3A5F;
+    color: #fff;
+    padding: 7px 10px;
+    text-align: left;
+    font-weight: 600;
+  }
+  td {
+    padding: 6px 10px;
+    border-bottom: 1px solid #E2E8F0;
+    vertical-align: top;
+  }
+  tr:nth-child(even) td { background: #F8FAFC; }
+
+  /* CÓDIGO */
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    background: #F1F5F9;
+    padding: 1px 5px;
+    border-radius: 3px;
+    color: #0D9488;
+  }
+  pre {
+    background: #0F172A;
+    color: #CCFBF1;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 14px 16px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 10px 0;
+    line-height: 1.6;
+  }
+
+  /* CALLOUT */
+  .callout {
+    background: #ECFDF5;
+    border-left: 3px solid #0D9488;
+    border-radius: 0 8px 8px 0;
+    padding: 10px 14px;
+    margin: 12px 0;
+    font-size: 11px;
+  }
+  .callout.warn {
+    background: #FFFBEB;
+    border-color: #F59E0B;
+  }
+
+  /* CHIP */
+  .chips { display: flex; flex-wrap: wrap; gap: 5px; margin: 8px 0; }
+  .chip {
+    background: #1E3A5F;
+    color: #5EEAD4;
+    font-size: 9.5px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
+
+  /* FOOTER */
+  .page-footer {
+    margin-top: 48px;
+    padding-top: 16px;
+    border-top: 1px solid #E2E8F0;
+    font-size: 10px;
+    color: #94A3B8;
+    text-align: center;
+  }
+
+  @media print {
+    body { padding: 24px 28px; }
+    h2 { page-break-before: auto; }
+    pre { page-break-inside: avoid; }
+    table { page-break-inside: avoid; }
+  }
+</style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="cover">
+  <div class="logo-badge">MEMORIA TÉCNICA</div>
+  <h1>SkillSwap</h1>
+  <p class="tagline">Marketplace de tutorías universitarias con IA y Blockchain</p>
+  <div class="cover-meta">
+    <div class="meta-item">
+      <label>Institución</label>
+      <span>Universidad Champagnat</span>
+    </div>
+    <div class="meta-item">
+      <label>Materia</label>
+      <span>Teoría de Computación 2</span>
+    </div>
+    <div class="meta-item">
+      <label>Carrera</label>
+      <span>Lic. en Sistemas de Información</span>
+    </div>
+    <div class="meta-item">
+      <label>Docente</label>
+      <span>Carolina Canessa</span>
+    </div>
+    <div class="meta-item">
+      <label>Fecha</label>
+      <span>26 de junio de 2026</span>
+    </div>
+    <div class="meta-item">
+      <label>Integrantes</label>
+      <span>[Nombres del equipo]</span>
+    </div>
+  </div>
+</div>
+
+<!-- 1. INTRODUCCIÓN Y PROBLEMA -->
+<h2>1. Introducción y Problema</h2>
+
+<p>SkillSwap nació para resolver una necesidad concreta del entorno universitario: la dificultad de los estudiantes para encontrar tutores de materias complejas dentro de su propia institución. La búsqueda de apoyo académico se realiza actualmente de manera informal —grupos de mensajería, carteleras, contactos de conocidos— sin ningún mecanismo de verificación, coordinación ni seguimiento.</p>
+
+<p>El proyecto propone un <strong>marketplace de tutorías</strong> donde alumnos universitarios activos pueden registrarse como tutores, ofrecer horarios disponibles, recibir solicitudes, coordinar sesiones y obtener calificaciones verificables. Todo el flujo se registra con trazabilidad blockchain, y un sistema de recomendación basado en IA ordena los resultados de búsqueda por compatibilidad.</p>
+
+<h3>Problema central</h3>
+<ul>
+  <li>No existe un espacio centralizado donde alumnos publiquen disponibilidad para enseñar una materia.</li>
+  <li>La coordinación de horarios se realiza de manera informal y sin historial.</li>
+  <li>No hay mecanismo de verificación de que el tutor sea un alumno activo de la carrera.</li>
+  <li>No existe reputación acumulada que permita al alumno evaluar la calidad antes de solicitar.</li>
+</ul>
+
+<!-- 2. SOLUCIÓN Y FUNCIONALIDADES -->
+<h2>2. Solución y Funcionalidades del MVP</h2>
+
+<p>SkillSwap es una aplicación web que implementa un patrón MVC en PHP 8, con MySQL como motor de base de datos y módulos de IA y Blockchain integrados. La plataforma gestiona tres roles de usuario con flujos diferenciados:</p>
+
+<table>
+  <tr><th>Rol</th><th>Capacidades principales</th></tr>
+  <tr>
+    <td><strong>Alumno</strong></td>
+    <td>Buscar tutores por materia, enviar solicitudes, chatear, calificar, denunciar, convertirse en tutor</td>
+  </tr>
+  <tr>
+    <td><strong>Tutor</strong></td>
+    <td>Gestionar horarios, aceptar/rechazar solicitudes, chatear, finalizar tutorías (dispara pago blockchain)</td>
+  </tr>
+  <tr>
+    <td><strong>Admin</strong></td>
+    <td>Aprobar/bloquear tutores, resolver denuncias, auditar transacciones blockchain, gestionar catálogo de materias</td>
+  </tr>
+</table>
+
+<h3>Flujo principal</h3>
+<ol>
+  <li>El tutor se registra y sube un certificado de alumno regular (pendiente de aprobación por admin).</li>
+  <li>El alumno busca tutores filtrados por materia; el sistema muestra resultados ordenados por score de IA.</li>
+  <li>El alumno elige un horario disponible y envía una solicitud con mensaje.</li>
+  <li>El tutor acepta; un trigger SQL marca el horario como ocupado y se habilita el chat.</li>
+  <li>Al finalizar, el sistema genera un <code>tx_hash</code> y registra el pago en la tabla blockchain.</li>
+</ol>
+
+<!-- 3. ARQUITECTURA TÉCNICA -->
+<h2>3. Arquitectura Técnica</h2>
+
+<h3>Stack tecnológico</h3>
+<div class="chips">
+  <span class="chip">PHP 8</span>
+  <span class="chip">MySQL / MariaDB</span>
+  <span class="chip">PDO</span>
+  <span class="chip">MVC sin framework</span>
+  <span class="chip">Apache / XAMPP</span>
+  <span class="chip">CSS3 vanilla</span>
+</div>
+
+<h3>Patrón MVC</h3>
+<pre>index.php (Front Controller / Router)
+    └── match($p) → instancia el Controller correcto
+         ├── AuthController       → vistas auth/
+         ├── TutorController      → vistas tutor/
+         ├── AlumnoController     → vistas alumno/
+         └── AdminController      → vistas admin/
+
+Cada Controller:
+  - Valida rol con Session::requireRol()
+  - Instancia uno o más Models
+  - Pasa datos a la vista con renderizar() + compact()</pre>
+
+<h3>Configuración de PDO</h3>
+<pre>$pdo = new PDO("mysql:host=...", $user, $pass, [
+    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
+    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+    PDO::ATTR_EMULATE_PREPARES   => false,   // prepared statements nativos
+]);</pre>
+
+<p>La combinación de <code>ERRMODE_EXCEPTION</code> + <code>EMULATE_PREPARES=false</code> garantiza que los errores de BD se propagan correctamente y que los prepared statements son nativos del motor (no emulados), lo que previene second-order SQL injection.</p>
+
+<!-- 4. LÍNEAS TEMÁTICAS -->
+<h2>4. Integración de Líneas Temáticas</h2>
+
+<table>
+  <tr><th>Unidad</th><th>Implementación concreta</th><th>Archivos clave</th></tr>
+  <tr>
+    <td><strong>I – Lenguajes de Programación</strong></td>
+    <td>PHP 8 con OOP estricto, patrón MVC, front controller con <code>match</code> expression, herencia implícita por composición</td>
+    <td><code>index.php</code>, <code>app/controllers/</code>, <code>app/models/</code></td>
+  </tr>
+  <tr>
+    <td><strong>II – Sistemas de Tipos</strong></td>
+    <td><code>declare(strict_types=1)</code> en todos los archivos, type hints en parámetros y retorno, <code>ENUM</code> en columnas SQL (<code>rol</code>, <code>estado</code>), <code>FETCH_ASSOC</code>, arrays tipados</td>
+    <td>Todos los modelos; <code>schema.sql</code></td>
+  </tr>
+  <tr>
+    <td><strong>III – Diseño de Compiladores / BD</strong></td>
+    <td>MySQL con 9 tablas relacionales, 2 triggers (<code>trg_horario_no_solapamiento</code>, <code>trg_solicitud_aceptada</code>), integridad referencial con FK, prepared statements como análogo a AST de consultas parametrizadas</td>
+    <td><code>sql/schema.sql</code>, <code>app/models/</code></td>
+  </tr>
+  <tr>
+    <td><strong>IV – Seguridad en Sistemas</strong></td>
+    <td><code>password_hash</code> bcrypt + <code>password_verify</code>, <code>htmlspecialchars()</code> en vistas, <code>session_regenerate_id(true)</code>, validación MIME en uploads, control de acceso por rol en cada controlador</td>
+    <td><code>app/helpers/Session.php</code>, <code>app/helpers/funciones.php</code>, vistas</td>
+  </tr>
+</table>
+
+<!-- 5. IA -->
+<h2>5. Módulo de Inteligencia Artificial</h2>
+
+<h3>Algoritmo de Recomendación por Score Ponderado</h3>
+
+<p>El sistema calcula un <strong>score de compatibilidad</strong> para cada tutor en relación al alumno que realiza la búsqueda, priorizando los resultados más relevantes:</p>
+
+<pre>score = (materias_coincidentes × 10)
+      + (promedio_calificacion × 5)
+      + (horarios_libres_activos × 2)</pre>
+
+<ul>
+  <li><strong>Materias coincidentes</strong>: número de materias en común entre lo que el alumno busca y lo que el tutor enseña. Es el factor con mayor peso porque es el criterio de necesidad más directo.</li>
+  <li><strong>Promedio de calificación</strong>: de 1 a 5 estrellas. Afecta el ranking pero con menor peso para no excluir tutores nuevos sin calificaciones.</li>
+  <li><strong>Horarios disponibles activos</strong>: tutores con mayor disponibilidad tienen una pequeña ventaja, evitando recomendar tutores con agenda llena.</li>
+</ul>
+
+<div class="callout">
+  <strong>Decisión arquitectónica:</strong> Se eligió score ponderado en lugar de ML porque en la etapa de MVP no hay volumen de datos suficiente para entrenar un modelo con significancia estadística. El diseño es modular: la función de score puede reemplazarse por cosine similarity o collaborative filtering cuando existan datos reales, sin modificar el resto de la aplicación.
+</div>
+
+<!-- 6. BLOCKCHAIN -->
+<h2>6. Módulo Blockchain</h2>
+
+<h3>Flujo de registro de pago</h3>
+<pre>Tutoría finalizada
+  → BlockchainPago::registrar($solicitudId, $tutorId, $alumnoId)
+      ├── Recupera wallet del tutor (usuarios.wallet_address)
+      ├── Genera: $txHash = '0x' . hash('sha256',
+      │       "skillswap:sol={$id}:tutor={$tid}:alumno={$aid}:"
+      │       . microtime(true) . ':' . random_bytes(8))
+      └── INSERT INTO blockchain_pagos
+              (solicitud_id, tutor_id, alumno_id,
+               wallet_destino, monto_eth=0.01,
+               tx_hash, red='Sepolia Testnet (simulado)')</pre>
+
+<h3>Estructura de la tabla</h3>
+<table>
+  <tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr>
+  <tr><td><code>tx_hash</code></td><td>VARCHAR(100)</td><td>Hash SHA-256 hex de 64 chars (formato Ethereum)</td></tr>
+  <tr><td><code>wallet_destino</code></td><td>VARCHAR(100)</td><td>Dirección Ethereum del tutor</td></tr>
+  <tr><td><code>monto_eth</code></td><td>DECIMAL(18,8)</td><td>Recompensa simbólica (0.01 ETH)</td></tr>
+  <tr><td><code>red</code></td><td>VARCHAR(30)</td><td>Red objetivo: Sepolia Testnet (simulado)</td></tr>
+  <tr><td><code>estado</code></td><td>ENUM</td><td>pendiente | confirmado</td></tr>
+</table>
+
+<div class="callout">
+  <strong>Decisión de diseño:</strong> En producción real se utilizaría <code>web3.php</code> con Infura/Alchemy para firmar y enviar transacciones a Sepolia Testnet. La arquitectura está preparada para este reemplazo sin modificar el resto del código: solo se cambia la función que genera el <code>tx_hash</code> por una llamada RPC real.
+</div>
+
+<!-- 7. SEGURIDAD -->
+<h2>7. Seguridad Implementada</h2>
+
+<table>
+  <tr><th>Amenaza</th><th>Mitigación</th><th>Código relevante</th></tr>
+  <tr>
+    <td>SQL Injection</td>
+    <td>PDO con prepared statements nativos (<code>EMULATE_PREPARES=false</code>)</td>
+    <td>Todos los modelos: <code>$s->prepare(); $s->execute([])</code></td>
+  </tr>
+  <tr>
+    <td>XSS</td>
+    <td><code>htmlspecialchars()</code> en todas las vistas antes de imprimir datos del usuario</td>
+    <td><code>funciones.php → e()</code>, aplicado en todas las vistas</td>
+  </tr>
+  <tr>
+    <td>Contraseñas en texto plano</td>
+    <td><code>password_hash($pass, PASSWORD_DEFAULT)</code> con bcrypt</td>
+    <td><code>app/models/Usuario.php</code></td>
+  </tr>
+  <tr>
+    <td>Session Hijacking</td>
+    <td><code>session_regenerate_id(true)</code> al inicio de sesión</td>
+    <td><code>app/helpers/Session.php → login()</code></td>
+  </tr>
+  <tr>
+    <td>Upload malicioso</td>
+    <td>Validación de tipo MIME, límite 2 MB, renombrado con <code>uniqid()</code></td>
+    <td><code>app/controllers/AuthController.php → subirCertificado()</code></td>
+  </tr>
+  <tr>
+    <td>Acceso no autorizado</td>
+    <td><code>Session::requireRol('tutor')</code> en cada constructor de controller</td>
+    <td>Todos los controllers</td>
+  </tr>
+  <tr>
+    <td>Acceso a chat ajeno</td>
+    <td>Verificación de que el usuario es parte de la solicitud antes de cargar mensajes</td>
+    <td><code>TutorAlumnoController → chat()</code></td>
+  </tr>
+</table>
+
+<!-- 8. PRUEBAS -->
+<h2>8. Métricas y Pruebas Funcionales</h2>
+
+<table>
+  <tr><th>Caso de Prueba</th><th>Entrada</th><th>Resultado Esperado</th><th>Estado</th></tr>
+  <tr><td>Registro con email duplicado</td><td>Email ya registrado</td><td>Error controlado en formulario</td><td>✅ PASS</td></tr>
+  <tr><td>Login con contraseña incorrecta</td><td>Credenciales inválidas</td><td>Mensaje genérico (sin revelar cuál campo)</td><td>✅ PASS</td></tr>
+  <tr><td>Registro de tutor sin certificado</td><td>Formulario sin archivo</td><td>Validación de campo requerido</td><td>✅ PASS</td></tr>
+  <tr><td>Horario solapado</td><td>Horario superpuesto a uno existente</td><td>Trigger SQL rechaza la inserción</td><td>✅ PASS</td></tr>
+  <tr><td>Solicitud con horario ya ocupado</td><td>Horario en estado 'ocupado'</td><td>Error controlado en modelo</td><td>✅ PASS</td></tr>
+  <tr><td>Chat entre usuario no autorizado</td><td>Usuario ajeno a la solicitud</td><td>Redirección con error 403</td><td>✅ PASS</td></tr>
+  <tr><td>Finalización → pago blockchain</td><td>Tutoría en estado 'aceptada'</td><td>TX hash generado y registrado</td><td>✅ PASS</td></tr>
+  <tr><td>Upload mayor a 2 MB</td><td>Archivo de 3 MB</td><td>Rechazo con mensaje descriptivo</td><td>✅ PASS</td></tr>
+  <tr><td>XSS en bio del tutor</td><td><code>&lt;script&gt;alert(1)&lt;/script&gt;</code></td><td>Texto escapado en vista</td><td>✅ PASS</td></tr>
+  <tr><td>SQL Injection en búsqueda</td><td><code>' OR '1'='1</code></td><td>Tratado como literal, sin efecto</td><td>✅ PASS</td></tr>
+</table>
+
+<!-- 9. CONCLUSIÓN -->
+<h2>9. Conclusión</h2>
+
+<p>SkillSwap integra en un único proyecto funcional cuatro de las líneas temáticas del programa de Teoría de Computación 2, más los módulos de Inteligencia Artificial y Blockchain exigidos por el examen. El resultado es un MVP con flujo de usuario completo, seguro y documentado, que demuestra dominio técnico y comprensión de las decisiones arquitectónicas tomadas en cada etapa del desarrollo.</p>
+
+<p>El mayor aprendizaje del proyecto fue la integración entre capas: demostrar que la seguridad (Unidad IV), el sistema de tipos (Unidad II) y la integridad de la base de datos (Unidad III) no son características independientes sino que se refuerzan mutuamente en una arquitectura bien diseñada.</p>
+
+<p>Como trabajo futuro se proyecta: reemplazo del blockchain simulado por transacciones reales en Sepolia, integración de un modelo de ML para la recomendación cuando exista volumen de datos, y extensión del sistema a redes de múltiples universidades.</p>
+
+<div class="page-footer">
+  SkillSwap · Memoria Técnica · Lic. en Sistemas de Información · Universidad Champagnat · Junio 2026
+</div>
+
+</body>
+</html>
