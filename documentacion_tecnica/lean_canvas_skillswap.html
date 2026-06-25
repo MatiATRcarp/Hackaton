@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lean Canvas – SkillSwap</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: #0F172A;
+    color: #1E293B;
+    min-height: 100vh;
+    padding: 32px 24px 48px;
+  }
+
+  .header {
+    text-align: center;
+    margin-bottom: 28px;
+  }
+  .header .logo {
+    display: inline-block;
+    background: #0D9488;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 700;
+    padding: 5px 16px;
+    border-radius: 20px;
+    letter-spacing: 0.5px;
+    margin-bottom: 12px;
+  }
+  .header h1 {
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+  .header p {
+    color: #94A3B8;
+    font-size: 14px;
+    margin-top: 6px;
+  }
+
+  .canvas-wrapper {
+    max-width: 1200px;
+    margin: 0 auto;
+    background: #F8FAFC;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.4);
+    border: 1px solid #E2E8F0;
+  }
+
+  /* Grid: 5 columnas × 2 filas + fila inferior de 2 cols */
+  .canvas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1.4fr 1fr 1fr;
+    grid-template-rows: auto auto auto;
+  }
+
+  .cell {
+    border: 1.5px solid #E2E8F0;
+    padding: 18px 16px 16px;
+    background: #fff;
+    position: relative;
+    min-height: 180px;
+  }
+
+  /* Colores por tipo de celda */
+  .cell.problem    { background: #FFF1F2; }
+  .cell.solution   { background: #ECFDF5; }
+  .cell.uvp        { background: #EEF2FF; grid-row: 1 / 3; }
+  .cell.advantage  { background: #FFFBEB; }
+  .cell.segments   { background: #F0F9FF; }
+  .cell.metrics    { background: #ECFDF5; }
+  .cell.channels   { background: #F5F3FF; }
+  .cell.costs      { background: #FFF7ED; grid-column: 1 / 3; }
+  .cell.revenue    { background: #F0FDF4; grid-column: 4 / 6; }
+  .cell.techline   { background: #0F172A; grid-column: 1 / 6; padding: 10px 16px; min-height: auto; }
+
+  .cell-label {
+    font-size: 9px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #94A3B8;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .cell-label .dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+    opacity: 0.5;
+  }
+
+  .cell-title {
+    font-size: 13px;
+    font-weight: 700;
+    color: #0F172A;
+    margin-bottom: 10px;
+  }
+
+  ul.items {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+  ul.items li {
+    font-size: 12px;
+    color: #334155;
+    line-height: 1.5;
+    padding-left: 14px;
+    position: relative;
+  }
+  ul.items li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #0D9488;
+  }
+
+  .cell.problem ul.items li::before  { background: #F43F5E; }
+  .cell.advantage ul.items li::before { background: #F59E0B; }
+  .cell.segments ul.items li::before  { background: #3B82F6; }
+  .cell.channels ul.items li::before  { background: #8B5CF6; }
+  .cell.metrics ul.items li::before   { background: #10B981; }
+  .cell.costs ul.items li::before     { background: #F97316; }
+  .cell.revenue ul.items li::before   { background: #22C55E; }
+
+  .uvp-headline {
+    font-size: 18px;
+    font-weight: 800;
+    color: #3730A3;
+    line-height: 1.35;
+    margin-bottom: 12px;
+  }
+  .uvp-sub {
+    font-size: 11px;
+    color: #4F46E5;
+    font-style: italic;
+    line-height: 1.5;
+    margin-bottom: 14px;
+  }
+  .uvp-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 8px;
+  }
+  .tag {
+    background: #4F46E5;
+    color: #fff;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 3px 9px;
+    border-radius: 20px;
+    letter-spacing: 0.3px;
+  }
+
+  .techline {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .techline span.tl-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #0D9488;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    white-space: nowrap;
+  }
+  .tech-chip {
+    background: #1E3A5F;
+    color: #5EEAD4;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 4px 11px;
+    border-radius: 20px;
+    border: 1px solid #0D9488;
+  }
+
+  .canvas-title-bar {
+    background: #1E3A5F;
+    padding: 14px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .canvas-title-bar h2 {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+  }
+  .canvas-title-bar span {
+    color: #94A3B8;
+    font-size: 11px;
+  }
+
+  .col-split {
+    display: grid;
+    grid-column: 3 / 4;
+    grid-row: 3 / 4;
+  }
+
+  @media (max-width: 900px) {
+    .canvas-grid {
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto;
+    }
+    .cell.uvp { grid-row: auto; grid-column: 1 / 3; }
+    .cell.costs { grid-column: 1 / 3; }
+    .cell.revenue { grid-column: 1 / 3; }
+    .cell.techline { grid-column: 1 / 3; }
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    .canvas-wrapper { box-shadow: none; border: 1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">LEAN CANVAS</div>
+  <h1>SkillSwap</h1>
+  <p>Marketplace de tutorías universitarias · Universidad Champagnat · Junio 2026</p>
+</div>
+
+<div class="canvas-wrapper">
+
+  <div class="canvas-title-bar">
+    <h2>🎓 SkillSwap — Propuesta de Valor</h2>
+    <span>Teoría de Computación 2 · Examen Final · Hackathon</span>
+  </div>
+
+  <div class="canvas-grid">
+
+    <!-- PROBLEMA -->
+    <div class="cell problem" style="grid-column:1; grid-row:1;">
+      <div class="cell-label"><span class="dot"></span> 01 · Problema</div>
+      <div class="cell-title">¿Qué problema resolvemos?</div>
+      <ul class="items">
+        <li>Los alumnos no saben dónde encontrar tutores de su propia carrera</li>
+        <li>La coordinación de tutorías se hace de manera informal (WhatsApp, grupos)</li>
+        <li>No existe verificación de que el tutor sea un alumno regular activo</li>
+        <li>No hay historial ni reputación que avale la calidad de la tutoría</li>
+      </ul>
+    </div>
+
+    <!-- SOLUCIÓN -->
+    <div class="cell solution" style="grid-column:2; grid-row:1;">
+      <div class="cell-label"><span class="dot"></span> 02 · Solución</div>
+      <div class="cell-title">¿Qué ofrecemos?</div>
+      <ul class="items">
+        <li>Plataforma web para buscar tutores por materia y área</li>
+        <li>Gestión de horarios disponibles con prevención de solapamiento (trigger SQL)</li>
+        <li>Chat privado habilitado solo para sesiones aceptadas</li>
+        <li>Sistema de calificaciones con reseñas verificadas</li>
+        <li>Registro de pagos simbólicos en Blockchain (Sepolia)</li>
+        <li>Panel admin con moderación de denuncias</li>
+      </ul>
+    </div>
+
+    <!-- UVP (ocupa 2 filas) -->
+    <div class="cell uvp" style="grid-column:3; grid-row:1/3;">
+      <div class="cell-label"><span class="dot"></span> 03 · Propuesta de Valor Única</div>
+      <div class="uvp-headline">
+        Conectá con alguien que ya pasó por lo mismo.
+      </div>
+      <div class="uvp-sub">
+        La única plataforma donde tutores y alumnos de la misma universidad se encuentran, coordinan y registran sus sesiones con transparencia blockchain.
+      </div>
+      <ul class="items">
+        <li>Tutores verificados con certificado académico</li>
+        <li>Horarios en tiempo real, sin intercambio de mensajes</li>
+        <li>Registro inmutable de cada sesión (blockchain)</li>
+        <li>IA que recomienda el tutor más compatible</li>
+        <li>100% gratis para alumnos en versión comunitaria</li>
+      </ul>
+      <div class="uvp-tags">
+        <span class="tag">PHP · MVC</span>
+        <span class="tag">MySQL + Triggers</span>
+        <span class="tag">Blockchain</span>
+        <span class="tag">IA Matching</span>
+        <span class="tag">Seguridad</span>
+      </div>
+    </div>
+
+    <!-- VENTAJA INJUSTA -->
+    <div class="cell advantage" style="grid-column:4; grid-row:1;">
+      <div class="cell-label"><span class="dot"></span> 04 · Ventaja Injusta</div>
+      <div class="cell-title">¿Qué nos diferencia?</div>
+      <ul class="items">
+        <li>Integración con el ecosistema académico (certificado de alumno regular)</li>
+        <li>Registro en Blockchain que genera confianza sin intermediarios</li>
+        <li>Comunidad cerrada de la misma institución (confianza intrínseca)</li>
+        <li>Bajo costo de adquisición: los propios alumnos son tutores</li>
+      </ul>
+    </div>
+
+    <!-- SEGMENTOS -->
+    <div class="cell segments" style="grid-column:5; grid-row:1;">
+      <div class="cell-label"><span class="dot"></span> 05 · Segmentos de Clientes</div>
+      <div class="cell-title">¿A quién le resolvemos el problema?</div>
+      <ul class="items">
+        <li><strong>Alumnos universitarios</strong> con dificultades en materias clave</li>
+        <li><strong>Estudiantes avanzados</strong> que quieren generar ingresos enseñando</li>
+        <li><strong>Instituciones</strong> que buscan reducir deserción estudiantil</li>
+        <li>Foco inicial: carreras de Sistemas / Ingeniería / Exactas</li>
+      </ul>
+    </div>
+
+    <!-- MÉTRICAS CLAVE -->
+    <div class="cell metrics" style="grid-column:1; grid-row:2;">
+      <div class="cell-label"><span class="dot"></span> 06 · Métricas Clave</div>
+      <div class="cell-title">¿Cómo medimos el éxito?</div>
+      <ul class="items">
+        <li>Nº de solicitudes de tutoría enviadas / mes</li>
+        <li>Tasa de aceptación de solicitudes</li>
+        <li>Calificación promedio de tutores</li>
+        <li>Tasa de conversión alumno → tutor</li>
+        <li>Nº de transacciones Blockchain registradas</li>
+      </ul>
+    </div>
+
+    <!-- CANALES -->
+    <div class="cell channels" style="grid-column:2; grid-row:2;">
+      <div class="cell-label"><span class="dot"></span> 07 · Canales</div>
+      <div class="cell-title">¿Cómo llegamos a los usuarios?</div>
+      <ul class="items">
+        <li>Boca a boca entre estudiantes de la misma carrera</li>
+        <li>Integración con aulas virtuales de la institución</li>
+        <li>Redes sociales universitarias (Instagram, grupos de facultad)</li>
+        <li>Convenios con centros de estudiantes</li>
+        <li>QR en carteleras de la facultad</li>
+      </ul>
+    </div>
+
+    <!-- COSTOS -->
+    <div class="cell costs" style="grid-column:1/3; grid-row:3;">
+      <div class="cell-label"><span class="dot"></span> 08 · Estructura de Costos</div>
+      <div class="cell-title">¿En qué incurrimos?</div>
+      <ul class="items">
+        <li>Hosting web (VPS o shared hosting, ~$5–15 USD/mes)</li>
+        <li>Dominio personalizado (~$10 USD/año)</li>
+        <li>Mantenimiento y desarrollo de nuevas funcionalidades</li>
+        <li>Moderación del panel admin (tiempo voluntario o pagado)</li>
+        <li>En producción: gas fees Ethereum si se usa red real (mínimos en L2)</li>
+      </ul>
+    </div>
+
+    <!-- UVP fila 3 vacía (el grid la completa) -->
+
+    <!-- FUENTES DE INGRESO -->
+    <div class="cell revenue" style="grid-column:4/6; grid-row:3;">
+      <div class="cell-label"><span class="dot"></span> 09 · Fuentes de Ingreso</div>
+      <div class="cell-title">¿Cómo se sostendrá el proyecto?</div>
+      <ul class="items">
+        <li><strong>v1 — Comunitario gratuito</strong>: sin costo para alumno ni tutor</li>
+        <li><strong>v2 — Freemium tutor</strong>: destacado en búsquedas por suscripción mensual</li>
+        <li><strong>v3 — B2B institucional</strong>: licencia para universidades privadas</li>
+        <li>Comisión sobre pagos reales en ETH (versión productiva)</li>
+        <li>Publicidad académica no intrusiva (libros, cursos)</li>
+      </ul>
+    </div>
+
+    <!-- LÍNEAS TEMÁTICAS (banner inferior) -->
+    <div class="cell techline" style="grid-column:1/6; grid-row:4;">
+      <div class="techline">
+        <span class="tl-label">📚 Líneas integradas:</span>
+        <span class="tech-chip">Unidad I · Lenguajes de Programación (PHP 8, MVC, OOP)</span>
+        <span class="tech-chip">Unidad II · Sistemas de Tipos (strict_types, type hints, ENUM SQL)</span>
+        <span class="tech-chip">Unidad III · BD &amp; Compiladores (MySQL, Triggers, PDO)</span>
+        <span class="tech-chip">Unidad IV · Seguridad (hash, XSS, sessions, MIME)</span>
+        <span class="tech-chip">IA · Score Matching</span>
+        <span class="tech-chip">Blockchain · Sepolia Testnet</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>
