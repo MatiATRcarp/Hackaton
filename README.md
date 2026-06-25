@@ -139,8 +139,6 @@ skillswap/
 │   └── helpers/
 │       ├── Session.php    # Gestión de sesiones segura
 │       └── funciones.php  # renderizar(), redirigir(), e(), conectar()
-├── sql/
-│   └── schema.sql    # DDL completo + seed data
 └── index.php         # Front controller / Router
 ```
 
